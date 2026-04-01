@@ -1,4 +1,4 @@
-package com.goormthon5backend.config;
+package com.goormthon5backend.global.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
