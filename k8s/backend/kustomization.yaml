@@ -11,6 +11,17 @@ configMapGenerator:
   - name: backend-config
     files:
       - config.json=config/backend-config.json
+  - name: backend-env
+    literals:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_HOST=mysql-service
+      - DB_PORT=3306
+      - DB_NAME=goormthon5
+      - DB_USERNAME=sunolum_admin
+      - SHOW_SQL=false
+      - DDL_AUTO=update
+      - AWS_S3_BUCKET=goorm-5-bucket
+      - AWS_REGION=ap-northeast-2
 
 generatorOptions:
   disableNameSuffixHash: true
