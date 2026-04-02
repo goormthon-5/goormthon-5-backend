@@ -1,4 +1,4 @@
-package com.goormthon5backend.repository;
+package com.goormthon5backend.repository.accommodation;
 
 import com.goormthon5backend.domain.entity.AccommodationImage;
 import java.util.List;

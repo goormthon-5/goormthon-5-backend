@@ -1,7 +1,7 @@
 package com.goormthon5backend.service.favorite;
 
 import com.goormthon5backend.dto.favorite.FavoriteDto;
-import com.goormthon5backend.repository.UserRepository;
+import com.goormthon5backend.repository.user.UserRepository;
 import com.goormthon5backend.repository.accommodation.AccommodationRepository;
 import com.goormthon5backend.repository.favorite.FavoriteRepository;
 import java.util.List;

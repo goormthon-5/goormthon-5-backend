@@ -1,4 +1,4 @@
-package com.goormthon5backend.repository;
+package com.goormthon5backend.repository.common;
 
 import com.goormthon5backend.domain.entity.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
