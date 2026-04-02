@@ -20,6 +20,8 @@ app:
   cors:
     allowed-origins:
       - http://localhost:3000
+      - https://goormthon-5.goorm.training
+      - http://goormthon-5.goorm.training
     allowed-methods:
       - GET
       - POST
