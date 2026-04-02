@@ -5,7 +5,7 @@ import com.goormthon5backend.domain.enums.OptionCategory;
 import com.goormthon5backend.dto.accommodation.AccommodationDto;
 import com.goormthon5backend.repository.AccommodationOptionRepository;
 import com.goormthon5backend.repository.AccommodationImageRepository;
-import com.goormthon5backend.repository.GuestBookRepository;
+import com.goormthon5backend.repository.guest_book.GuestBookRepository;
 import com.goormthon5backend.repository.accommodation.AccommodationRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -59,7 +59,8 @@ public class AccommodationService {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "숙소를 찾을 수 없습니다."));
 
-        Object[] ratingSummary = guestBookRepository.findRatingSummaryByAccommodationId(accommodationId);
+        List<Object[]> ratingSummaryRows = guestBookRepository.findRatingSummaryByAccommodationId(accommodationId);
+        Object[] ratingSummary = ratingSummaryRows.isEmpty() ? null : ratingSummaryRows.get(0);
         Double averageRating = 0.0;
         Long guestBookCount = 0L;
         if (ratingSummary != null) {

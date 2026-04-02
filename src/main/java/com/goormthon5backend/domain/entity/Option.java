@@ -23,9 +23,8 @@ public class Option {
     @Column(name = "option_id", nullable = false)
     private Long optionId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "category", nullable = false)
-    private OptionCategory category;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     protected Option() {
     }
