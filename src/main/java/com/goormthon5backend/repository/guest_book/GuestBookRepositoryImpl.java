@@ -7,6 +7,7 @@ import com.goormthon5backend.domain.enums.GuestBookType;
 import com.goormthon5backend.dto.guest_book.GuestBookDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class GuestBookRepositoryImpl implements GuestBookRepositoryCustom {
     private static final QGuestBookImage guestbookImage = QGuestBookImage.guestBookImage;
     private static final QImage image = QImage.image;
 
+    private final EntityManager entityManager;
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -101,5 +103,23 @@ public class GuestBookRepositoryImpl implements GuestBookRepositoryCustom {
             .where(guestBook.accommodation.accommodationId.eq(accommodationId))
             .orderBy(guestBook.createdAt.desc(), guestBook.guestBookId.desc())
             .fetch();
+    }
+
+    @Override
+    public Long createGuestBook(Long accommodationId, Long userId, String content, GuestBookType type, Integer rating) {
+        entityManager.createNativeQuery(
+            """
+                INSERT INTO guest_book (content, type, rating, updated_at, created_at, accommodation_id, user_id)
+                VALUES (:content, :type, :rating, NOW(), NOW(), :accommodationId, :userId)
+                """
+        )
+            .setParameter("content", content)
+            .setParameter("type", type.name())
+            .setParameter("rating", rating)
+            .setParameter("accommodationId", accommodationId)
+            .setParameter("userId", userId)
+            .executeUpdate();
+
+        return ((Number) entityManager.createNativeQuery("SELECT LAST_INSERT_ID()").getSingleResult()).longValue();
     }
 }

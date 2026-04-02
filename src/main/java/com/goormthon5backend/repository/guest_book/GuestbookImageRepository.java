@@ -1,13 +1,13 @@
 package com.goormthon5backend.repository.guest_book;
 
 import com.goormthon5backend.domain.entity.GuestBookImage;
-
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface GuestbookImageRepository extends JpaRepository<GuestBookImage, Long> {
+public interface GuestbookImageRepository
+    extends JpaRepository<GuestBookImage, Long>, GuestbookImageRepositoryCustom {
 
     @Query(
         """
