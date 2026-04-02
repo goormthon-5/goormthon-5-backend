@@ -29,7 +29,9 @@ public final class ReservationDto {
         Long userId,
         Integer guestCount,
         LocalDate startDate,
-        LocalDate endDate
+        LocalDate endDate,
+        Double averageRating,
+        Long guestBookCount
     ) {
     }
 }
