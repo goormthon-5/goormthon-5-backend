@@ -2,6 +2,7 @@ package com.goormthon5backend.dto.accommodation;
 
 import com.goormthon5backend.domain.entity.Accommodation;
 import com.goormthon5backend.domain.entity.Address;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Builder;
 
@@ -19,7 +20,7 @@ public final class AccommodationDto {
         Integer cost,
         Double averageRating,
         Long guestBookCount,
-        List<String> availableOptions
+        List<String> options
     ) {
         public static ListItemDto from(
             Accommodation accommodation,
@@ -35,7 +36,7 @@ public final class AccommodationDto {
                 .cost(accommodation.getCost())
                 .averageRating(averageRating)
                 .guestBookCount(guestBookCount)
-                .availableOptions(availableOptions)
+                .options(availableOptions)
                 .build();
         }
     }
@@ -46,31 +47,55 @@ public final class AccommodationDto {
         String name,
         String description,
         AddressDto address,
-        Integer cost
+        Integer cost,
+        String imageUrl,
+        Double averageRating,
+        Long guestBookCount,
+        List<OptionDto> options
     ) {
-        public static DetailDto from(Accommodation accommodation) {
+        public static DetailDto from(
+            Accommodation accommodation,
+            String imageUrl,
+            Double averageRating,
+            Long guestBookCount,
+            List<OptionDto> options
+        ) {
             return DetailDto.builder()
                 .accommodationId(accommodation.getAccommodationId())
                 .name(accommodation.getName())
                 .description(accommodation.getDescription())
                 .address(AddressDto.from(accommodation.getAddress()))
                 .cost(accommodation.getCost())
+                .imageUrl(imageUrl)
+                .averageRating(averageRating)
+                .guestBookCount(guestBookCount)
+                .options(options)
                 .build();
         }
     }
 
+    public record OptionDto(
+        Long optionId,
+        String name,
+        Integer price
+    ) {
+    }
+
     public record AddressDto(
-        String mainAddress,
-        String detailAddress,
-        String postalCode,
+        @JsonProperty("address_group")
+        String addressGroup,
+        @JsonProperty("address_short")
+        String addressShort,
+        @JsonProperty("address_detail")
+        String addressDetail,
         Double latitude,
         Double longitude
     ) {
         public static AddressDto from(Address address) {
             return new AddressDto(
-                address.getMainAddress(),
-                address.getDetailAddress(),
-                address.getPostalCode(),
+                address.getAddressGroup(),
+                address.getAddressShort(),
+                address.getAddressDetail(),
                 Double.valueOf(address.getLatitude()),
                 Double.valueOf(address.getLongitude())
             );

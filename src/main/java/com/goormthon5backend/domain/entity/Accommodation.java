@@ -36,9 +36,9 @@ public class Accommodation {
 
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "mainAddress", column = @Column(name = "main_address", nullable = false)),
-        @AttributeOverride(name = "detailAddress", column = @Column(name = "detail_address", nullable = false)),
-        @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code", nullable = false)),
+        @AttributeOverride(name = "addressGroup", column = @Column(name = "address_group", nullable = false)),
+        @AttributeOverride(name = "addressShort", column = @Column(name = "address_short", nullable = false)),
+        @AttributeOverride(name = "addressDetail", column = @Column(name = "address_detail", nullable = false)),
         @AttributeOverride(name = "latitude", column = @Column(name = "latitude", nullable = false)),
         @AttributeOverride(name = "longitude", column = @Column(name = "longitude", nullable = false))
     })
