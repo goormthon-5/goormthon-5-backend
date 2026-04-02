@@ -6,6 +6,7 @@ import com.goormthon5backend.repository.UserRepository;
 import com.goormthon5backend.repository.accommodation.AccommodationRepository;
 import com.goormthon5backend.repository.guest_book.GuestBookRepository;
 import com.goormthon5backend.repository.guest_book.GuestbookImageRepository;
+import com.goormthon5backend.service.accommodation.AccommodationAiAsyncService;
 import com.goormthon5backend.service.file.S3FileService;
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +15,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,6 +29,7 @@ public class GuestBookService {
     private final GuestBookRepository guestBookRepository;
     private final GuestbookImageRepository guestbookImageRepository;
     private final S3FileService s3FileService;
+    private final AccommodationAiAsyncService accommodationAiAsyncService;
 
     public List<GuestBookDto.ListItemDto> getAccommodationGuestBooks(Long accommodationId) {
         if (!accommodationRepository.existsById(accommodationId)) {
@@ -60,6 +64,8 @@ public class GuestBookService {
                 guestbookImageRepository.createGuestbookImage(guestBookId, imageId);
             }
 
+            maybeRunAiRewriteInBackgroundAfterCommit(accommodationId);
+
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "유효하지 않은 사용자 또는 숙소");
         }
@@ -70,5 +76,24 @@ public class GuestBookService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "IMAGE 타입은 image 파일이 필수입니다.");
         }
         return s3FileService.upload(imageFile).fileUrl();
+    }
+
+    private void maybeRunAiRewriteInBackgroundAfterCommit(Long accommodationId) {
+        long guestBookCount = guestBookRepository.countByAccommodationId(accommodationId);
+        if (guestBookCount != 10L) {
+            return;
+        }
+
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    accommodationAiAsyncService.rewriteAccommodationAsync(accommodationId);
+                }
+            });
+            return;
+        }
+
+        accommodationAiAsyncService.rewriteAccommodationAsync(accommodationId);
     }
 }

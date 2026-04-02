@@ -139,4 +139,17 @@ public class GuestBookRepositoryImpl implements GuestBookRepositoryCustom {
             .orderBy(guestBook.createdAt.desc(), guestBook.guestBookId.desc())
             .fetch();
     }
+
+    @Override
+    public long countByAccommodationId(Long accommodationId) {
+        if (accommodationId == null) {
+            return 0L;
+        }
+        Long count = queryFactory
+            .select(guestBook.guestBookId.count())
+            .from(guestBook)
+            .where(guestBook.accommodation.accommodationId.eq(accommodationId))
+            .fetchOne();
+        return count == null ? 0L : count;
+    }
 }
