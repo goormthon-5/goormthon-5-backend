@@ -18,6 +18,12 @@ public final class FavoriteDto {
     ) {
     }
 
+    public record StatusResponse(
+        boolean isfavorited,
+        Long favoriteId
+    ) {
+    }
+
     public record ListItemDto(
         Long favoriteId,
         Long accommodationId,

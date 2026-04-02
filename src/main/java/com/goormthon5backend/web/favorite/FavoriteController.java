@@ -24,6 +24,14 @@ public class FavoriteController {
         return favoriteService.getFavoriteList(userId);
     }
 
+    @GetMapping("/status")
+    public FavoriteDto.StatusResponse status(
+        @RequestParam Long userId,
+        @RequestParam Long accommodationId
+    ) {
+        return favoriteService.getFavoriteStatus(userId, accommodationId);
+    }
+
     @PostMapping
     public FavoriteDto.ActionResponse create(@RequestBody FavoriteDto.CreateRequest request) {
         return favoriteService.createFavorite(request);
