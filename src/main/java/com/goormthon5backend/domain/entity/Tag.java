@@ -1,5 +1,7 @@
 package com.goormthon5backend.domain.entity;
 
+import lombok.Getter;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +11,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tags")
+
+@Getter
 public class Tag {
 
     @Id

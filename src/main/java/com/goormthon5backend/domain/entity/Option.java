@@ -1,5 +1,7 @@
 package com.goormthon5backend.domain.entity;
 
+import lombok.Getter;
+
 import com.goormthon5backend.domain.enums.OptionCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +14,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "options")
+
+@Getter
 public class Option {
 
     @Id

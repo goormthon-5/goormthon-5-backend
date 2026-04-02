@@ -1,5 +1,7 @@
 package com.goormthon5backend.domain.entity;
 
+import lombok.Getter;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "inventorys")
+
+@Getter
 public class Inventory {
 
     @Id

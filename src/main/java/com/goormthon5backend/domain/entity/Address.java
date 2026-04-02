@@ -1,9 +1,13 @@
 package com.goormthon5backend.domain.entity;
 
+import lombok.Getter;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
+
+@Getter
 public class Address {
 
     @Column(name = "main_address", nullable = false)

@@ -1,5 +1,7 @@
 package com.goormthon5backend.domain.entity;
 
+import lombok.Getter;
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -16,6 +18,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "accommodations")
+
+@Getter
 public class Accommodation {
 
     @Id

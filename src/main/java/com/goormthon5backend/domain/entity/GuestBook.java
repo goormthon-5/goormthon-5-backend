@@ -1,5 +1,7 @@
 package com.goormthon5backend.domain.entity;
 
+import lombok.Getter;
+
 import com.goormthon5backend.domain.enums.GuestBookType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +19,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "guest_book")
+
+@Getter
 public class GuestBook {
 
     @Id
