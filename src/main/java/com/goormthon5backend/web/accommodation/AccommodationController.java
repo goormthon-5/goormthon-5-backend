@@ -2,8 +2,10 @@ package com.goormthon5backend.web.accommodation;
 
 import com.goormthon5backend.dto.accommodation.AccommodationDto;
 import com.goormthon5backend.service.accommodation.AccommodationService;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,16 +21,20 @@ public class AccommodationController {
 
     @GetMapping
     public List<AccommodationDto.ListItemDto> list(
-        @RequestParam(required = false) List<String> areaGroup
+        @RequestParam(required = false) List<String> areaGroup,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
-        return accommodationService.getAccommodationList(areaGroup);
+        return accommodationService.getAccommodationList(areaGroup, startDate, endDate);
     }
 
     @GetMapping("/search")
     public List<AccommodationDto.ListItemDto> search(
-        @RequestParam String keyword
+        @RequestParam String keyword,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
-        return accommodationService.searchAccommodationList(keyword);
+        return accommodationService.searchAccommodationList(keyword, startDate, endDate);
     }
 
     @GetMapping("/{accommodationId}")
