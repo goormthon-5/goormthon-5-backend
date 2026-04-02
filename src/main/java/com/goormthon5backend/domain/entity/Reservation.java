@@ -24,7 +24,7 @@ public class Reservation {
     @Column(name = "reservaton_id", nullable = false)
     private Long reservatonId;
 
-    @Column(name = "guest_count", nullable = false)
+    @Column(name = "guest_count")
     private Integer guestCount;
 
     @Column(name = "created_at", nullable = false)
