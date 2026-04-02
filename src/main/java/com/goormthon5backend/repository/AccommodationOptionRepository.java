@@ -9,14 +9,14 @@ import org.springframework.data.repository.query.Param;
 public interface AccommodationOptionRepository extends JpaRepository<AccommodationOption, Long> {
 
     @Query("""
-        SELECT ao.accommodation.accommodationId, ao.option.category
+        SELECT ao.accommodation.accommodationId, ao.option.name
         FROM AccommodationOption ao
         WHERE ao.accommodation.accommodationId IN :accommodationIds
         """)
     List<Object[]> findOptionCategoriesByAccommodationIds(@Param("accommodationIds") List<Long> accommodationIds);
 
     @Query("""
-        SELECT ao.option.optionId, ao.option.category, ao.cost
+        SELECT ao.option.optionId, ao.option.name, ao.cost
         FROM AccommodationOption ao
         WHERE ao.accommodation.accommodationId = :accommodationId
         ORDER BY ao.option.optionId ASC

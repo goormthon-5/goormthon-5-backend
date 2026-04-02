@@ -1,7 +1,6 @@
 package com.goormthon5backend.service.accommodation;
 
 import com.goormthon5backend.domain.entity.Accommodation;
-import com.goormthon5backend.domain.enums.OptionCategory;
 import com.goormthon5backend.dto.accommodation.AccommodationDto;
 import com.goormthon5backend.repository.AccommodationOptionRepository;
 import com.goormthon5backend.repository.AccommodationImageRepository;
@@ -118,10 +117,10 @@ public class AccommodationService {
         Map<Long, List<String>> availableOptionsByAccommodationId = new HashMap<>();
         accommodationOptionRepository.findOptionCategoriesByAccommodationIds(accommodationIds).forEach(row -> {
             Long accommodationId = (Long) row[0];
-            OptionCategory category = (OptionCategory) row[1];
+            String optionName = String.valueOf(row[1]);
             availableOptionsByAccommodationId
                 .computeIfAbsent(accommodationId, ignored -> new ArrayList<>())
-                .add(category.name());
+                .add(optionName);
         });
 
         return accommodations.stream()

@@ -148,14 +148,14 @@ public class SeedDataService {
         return lastInsertId();
     }
 
-    private Long insertOption(String category) {
+    private Long insertOption(String name) {
         entityManager.createNativeQuery(
             """
-                INSERT INTO options (category)
-                VALUES (:category)
+                INSERT INTO options (name)
+                VALUES (:name)
                 """
         )
-            .setParameter("category", category)
+            .setParameter("name", name)
             .executeUpdate();
         return lastInsertId();
     }
