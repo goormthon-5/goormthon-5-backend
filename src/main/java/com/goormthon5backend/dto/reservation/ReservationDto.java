@@ -1,5 +1,6 @@
 package com.goormthon5backend.dto.reservation;
 
+import com.goormthon5backend.dto.accommodation.AccommodationDto;
 import java.time.LocalDate;
 
 public final class ReservationDto {
@@ -30,6 +31,7 @@ public final class ReservationDto {
         Integer guestCount,
         LocalDate startDate,
         LocalDate endDate,
+        AccommodationDto.AccommodationHostInfoDto accommodationHostInfo,
         Double averageRating,
         Long guestBookCount
     ) {

@@ -113,14 +113,12 @@ public class AccommodationService {
             .findFirst()
             .orElse(null);
         AccommodationHostInfo hostInfo = accommodationHostInfoRepository.findById(accommodationId).orElse(null);
+        AccommodationDto.AccommodationHostInfoDto hostInfoDto = toAccommodationHostInfoDto(hostInfo);
 
         return AccommodationDto.DetailDto.from(
             accommodation,
             imageUrl,
-            hostInfo != null ? hostInfo.getPersonality() : null,
-            hostInfo != null ? hostInfo.getTrait() : null,
-            hostInfo != null ? hostInfo.getCleanlinessLevel().name() : null,
-            hostInfo != null ? hostInfo.getHasWifi() : null,
+            hostInfoDto,
             averageRating,
             guestBookCount,
             options
@@ -235,17 +233,35 @@ public class AccommodationService {
                 .add(optionName);
         });
 
+        Map<Long, AccommodationDto.AccommodationHostInfoDto> hostInfoByAccommodationId = new HashMap<>();
+        accommodationHostInfoRepository.findAllById(accommodationIds).forEach(hostInfo ->
+            hostInfoByAccommodationId.put(hostInfo.getAccommodationId(), toAccommodationHostInfoDto(hostInfo))
+        );
+
         return accommodations.stream()
             .map(accommodation -> {
                 Long accommodationId = accommodation.getAccommodationId();
                 return AccommodationDto.ListItemDto.from(
                     accommodation,
+                    hostInfoByAccommodationId.get(accommodationId),
                     averageRatingByAccommodationId.getOrDefault(accommodationId, 0.0),
                     guestBookCountByAccommodationId.getOrDefault(accommodationId, 0L),
                     availableOptionsByAccommodationId.getOrDefault(accommodationId, Collections.emptyList())
                 );
             })
             .toList();
+    }
+
+    private AccommodationDto.AccommodationHostInfoDto toAccommodationHostInfoDto(AccommodationHostInfo hostInfo) {
+        if (hostInfo == null) {
+            return null;
+        }
+        return new AccommodationDto.AccommodationHostInfoDto(
+            hostInfo.getPersonality(),
+            hostInfo.getTrait(),
+            hostInfo.getCleanlinessLevel() != null ? hostInfo.getCleanlinessLevel().name() : null,
+            hostInfo.getHasWifi()
+        );
     }
 
     private void validateSearchFilters(LocalDate startDate, LocalDate endDate) {
