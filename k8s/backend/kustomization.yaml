@@ -14,9 +14,9 @@ configMapGenerator:
   - name: backend-env
     literals:
       - SPRING_PROFILES_ACTIVE=dev
-      - DB_HOST=mysql-service
+      - DB_HOST=mysql
       - DB_PORT=3306
-      - DB_NAME=goormthon5
+      - DB_NAME=sunolum
       - DB_USERNAME=sunolum_admin
       - SHOW_SQL=false
       - DDL_AUTO=update
