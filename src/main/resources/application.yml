@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:devLocal}
+    active: ${SPRING_PROFILES_ACTIVE:local}
   web:
     resources:
       cache:

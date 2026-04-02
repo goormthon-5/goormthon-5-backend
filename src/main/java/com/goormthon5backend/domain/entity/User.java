@@ -1,5 +1,6 @@
 package com.goormthon5backend.domain.entity;
 
+import com.goormthon5backend.domain.enums.GenderType;
 import lombok.Getter;
 
 import jakarta.persistence.Column;
@@ -19,6 +20,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Long userId;
+
+    @Column(name = "gender", nullable = false)
+    private GenderType gender;
 
     @Column(name = "name", nullable = false)
     private String name;
