@@ -53,6 +53,17 @@ public class FavoriteService {
         return new FavoriteDto.ActionResponse(true, "즐겨찾기가 해제되었습니다.", favoriteId);
     }
 
+    public FavoriteDto.StatusResponse getFavoriteStatus(Long userId, Long accommodationId) {
+        if (userId == null || accommodationId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "userId와 accommodationId는 필수입니다.");
+        }
+
+        validateUserAndAccommodation(userId, accommodationId);
+
+        Long favoriteId = favoriteRepository.findFavoriteId(userId, accommodationId);
+        return new FavoriteDto.StatusResponse(favoriteId != null, favoriteId);
+    }
+
     public List<FavoriteDto.ListItemDto> getFavoriteList(Long userId) {
         if (userId == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "userId는 필수입니다.");
