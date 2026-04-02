@@ -122,4 +122,34 @@ public class GuestBookRepositoryImpl implements GuestBookRepositoryCustom {
 
         return ((Number) entityManager.createNativeQuery("SELECT LAST_INSERT_ID()").getSingleResult()).longValue();
     }
+
+    @Override
+    public List<String> findTextContentsByAccommodationId(Long accommodationId) {
+        if (accommodationId == null) {
+            return List.of();
+        }
+
+        return queryFactory
+            .select(guestBook.content)
+            .from(guestBook)
+            .where(
+                guestBook.accommodation.accommodationId.eq(accommodationId),
+                guestBook.type.eq(GuestBookType.TEXT)
+            )
+            .orderBy(guestBook.createdAt.desc(), guestBook.guestBookId.desc())
+            .fetch();
+    }
+
+    @Override
+    public long countByAccommodationId(Long accommodationId) {
+        if (accommodationId == null) {
+            return 0L;
+        }
+        Long count = queryFactory
+            .select(guestBook.guestBookId.count())
+            .from(guestBook)
+            .where(guestBook.accommodation.accommodationId.eq(accommodationId))
+            .fetchOne();
+        return count == null ? 0L : count;
+    }
 }

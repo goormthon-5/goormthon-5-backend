@@ -39,6 +39,34 @@ public class SeedDataService {
             "이런 게 진짜 제주 여행이죠. 화려하진 않지만 마음이 넉넉해지는 숙소였습니다. 강력 추천해요!"
     );
 
+    private final List<String> hostPersonalities = Arrays.asList(
+            "정 많은",
+            "다정한",
+            "푸근한",
+            "인정 많은",
+            "수다스러운",
+            "호탕한",
+            "유쾌한",
+            "솔직한",
+            "털털한",
+            "인심 좋은",
+            "정겨운"
+    );
+
+    private final List<String> hostTraits = Arrays.asList(
+            "아침형",
+            "새벽형",
+            "부지런한",
+            "일찍 일어나는",
+            "규칙적인",
+            "손이 빠른",
+            "생활력 강한"
+    );
+
+    private final List<String> cleanlinessLevels = Arrays.asList("LV1", "LV2", "LV3");
+
+    private final Random random = new Random();
+
     private final EntityManager entityManager;
 
     @Transactional
@@ -126,7 +154,6 @@ public class SeedDataService {
         Long u51 = insertUser("이정민", GenderType.MALE, 29, "010-1111-1111");
         Long u52 = insertUser("조영찬", GenderType.MALE, 35, "010-2222-2222");
 
-        Random random = new Random();
 //        (random.nextInt(10) + 3)
 
         // 4. 숙소 데이터 생성 (50개) - 옵션 개수 0~3개 다양화 + 방명록 0~10개 랜덤
@@ -561,7 +588,15 @@ public class SeedDataService {
                 .setParameter("cost", cost)
                 .setParameter("userId", userId)
                 .executeUpdate();
-        return lastInsertId();
+        Long accommodationId = lastInsertId();
+        insertAccommodationHostInfo(
+                accommodationId,
+                hostPersonalities.get(random.nextInt(hostPersonalities.size())),
+                hostTraits.get(random.nextInt(hostTraits.size())),
+                cleanlinessLevels.get(random.nextInt(cleanlinessLevels.size())),
+                random.nextBoolean()
+        );
+        return accommodationId;
     }
 
     private Long insertOption(String name) {
@@ -586,6 +621,39 @@ public class SeedDataService {
                 .setParameter("accommodationId", accommodationId)
                 .setParameter("optionId", optionId)
                 .setParameter("cost", cost)
+                .executeUpdate();
+    }
+
+    private void insertAccommodationHostInfo(
+            Long accommodationId,
+            String personality,
+            String trait,
+            String cleanlinessLevel,
+            boolean hasWifi
+    ) {
+        entityManager.createNativeQuery(
+                        """
+                                INSERT INTO accommodation_host_info (
+                                    accommodation_id,
+                                    personality,
+                                    trait,
+                                    cleanliness_level,
+                                    has_wifi
+                                )
+                                VALUES (
+                                    :accommodationId,
+                                    :personality,
+                                    :trait,
+                                    :cleanlinessLevel,
+                                    :hasWifi
+                                )
+                                """
+                )
+                .setParameter("accommodationId", accommodationId)
+                .setParameter("personality", personality)
+                .setParameter("trait", trait)
+                .setParameter("cleanlinessLevel", cleanlinessLevel)
+                .setParameter("hasWifi", hasWifi)
                 .executeUpdate();
     }
 

@@ -1,6 +1,9 @@
 package com.goormthon5backend.service.reservation;
 
+import com.goormthon5backend.domain.entity.AccommodationHostInfo;
+import com.goormthon5backend.dto.accommodation.AccommodationDto;
 import com.goormthon5backend.dto.reservation.ReservationDto;
+import com.goormthon5backend.repository.AccommodationHostInfoRepository;
 import com.goormthon5backend.repository.ReservationAvailabilityRow;
 import com.goormthon5backend.repository.ReservationInventoryRepository;
 import com.goormthon5backend.repository.ReservationListRow;
@@ -26,6 +29,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final ReservationInventoryRepository reservationInventoryRepository;
     private final GuestBookRepository guestBookRepository;
+    private final AccommodationHostInfoRepository accommodationHostInfoRepository;
 
     public List<ReservationDto.ListItemDto> getReservationList(Long userId) {
         List<ReservationListRow> reservationRows = reservationRepository.findReservationList(userId);
@@ -49,10 +53,16 @@ public class ReservationService {
             guestBookCountByAccommodationId.put(accommodationId, guestBookCount);
         });
 
+        Map<Long, AccommodationDto.AccommodationHostInfoDto> hostInfoByAccommodationId = new HashMap<>();
+        accommodationHostInfoRepository.findAllById(accommodationIds).forEach(hostInfo ->
+            hostInfoByAccommodationId.put(hostInfo.getAccommodationId(), toAccommodationHostInfoDto(hostInfo))
+        );
+
         return reservationRows
             .stream()
             .map(row -> toListItemDto(
                 row,
+                hostInfoByAccommodationId.get(row.accommodationId()),
                 averageRatingByAccommodationId.getOrDefault(row.accommodationId(), 0.0),
                 guestBookCountByAccommodationId.getOrDefault(row.accommodationId(), 0L)
             ))
@@ -103,6 +113,7 @@ public class ReservationService {
 
     private ReservationDto.ListItemDto toListItemDto(
         ReservationListRow row,
+        AccommodationDto.AccommodationHostInfoDto accommodationHostInfo,
         Double averageRating,
         Long guestBookCount
     ) {
@@ -113,8 +124,21 @@ public class ReservationService {
             row.guestCount(),
             row.startDate(),
             row.endDate(),
+            accommodationHostInfo,
             averageRating,
             guestBookCount
+        );
+    }
+
+    private AccommodationDto.AccommodationHostInfoDto toAccommodationHostInfoDto(AccommodationHostInfo hostInfo) {
+        if (hostInfo == null) {
+            return null;
+        }
+        return new AccommodationDto.AccommodationHostInfoDto(
+            hostInfo.getPersonality(),
+            hostInfo.getTrait(),
+            hostInfo.getCleanlinessLevel() != null ? hostInfo.getCleanlinessLevel().name() : null,
+            hostInfo.getHasWifi()
         );
     }
 

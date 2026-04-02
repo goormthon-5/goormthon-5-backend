@@ -13,4 +13,8 @@ public interface GuestBookRepositoryCustom {
     List<GuestBookDto.ListItemDto> findListByAccommodationId(Long accommodationId);
 
     Long createGuestBook(Long accommodationId, Long userId, String content, GuestBookType type, Integer rating);
+
+    List<String> findTextContentsByAccommodationId(Long accommodationId);
+
+    long countByAccommodationId(Long accommodationId);
 }

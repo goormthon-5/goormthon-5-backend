@@ -1,5 +1,6 @@
 package com.goormthon5backend.web.accommodation;
 
+import com.goormthon5backend.dto.accommodation.AccommodationAiDto;
 import com.goormthon5backend.dto.accommodation.AccommodationDto;
 import com.goormthon5backend.service.accommodation.AccommodationService;
 import java.time.LocalDate;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,5 +42,10 @@ public class AccommodationController {
     @GetMapping("/{accommodationId}")
     public AccommodationDto.DetailDto detail(@PathVariable Long accommodationId) {
         return accommodationService.getAccommodationDetail(accommodationId);
+    }
+
+    @PostMapping("/{accommodationId}/ai-rewrite")
+    public AccommodationAiDto.RewriteResponse aiRewrite(@PathVariable Long accommodationId) {
+        return accommodationService.rewriteAccommodationByTextGuestBooks(accommodationId);
     }
 }

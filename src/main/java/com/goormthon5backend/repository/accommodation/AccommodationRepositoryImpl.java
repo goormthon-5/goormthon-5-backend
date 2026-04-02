@@ -119,4 +119,14 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
             )
             .notExists();
     }
+
+    @Override
+    public void updateNameAndDescription(Long accommodationId, String name, String description) {
+        queryFactory
+            .update(accommodation)
+            .set(accommodation.name, name)
+            .set(accommodation.description, description)
+            .where(accommodation.accommodationId.eq(accommodationId))
+            .execute();
+    }
 }
