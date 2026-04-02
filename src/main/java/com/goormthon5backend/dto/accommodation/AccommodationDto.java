@@ -2,6 +2,7 @@ package com.goormthon5backend.dto.accommodation;
 
 import com.goormthon5backend.domain.entity.Accommodation;
 import com.goormthon5backend.domain.entity.Address;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Builder;
 
@@ -81,17 +82,20 @@ public final class AccommodationDto {
     }
 
     public record AddressDto(
-        String mainAddress,
-        String detailAddress,
-        String postalCode,
+        @JsonProperty("address_group")
+        String addressGroup,
+        @JsonProperty("address_short")
+        String addressShort,
+        @JsonProperty("address_detail")
+        String addressDetail,
         Double latitude,
         Double longitude
     ) {
         public static AddressDto from(Address address) {
             return new AddressDto(
-                address.getMainAddress(),
-                address.getDetailAddress(),
-                address.getPostalCode(),
+                address.getAddressGroup(),
+                address.getAddressShort(),
+                address.getAddressDetail(),
                 Double.valueOf(address.getLatitude()),
                 Double.valueOf(address.getLongitude())
             );

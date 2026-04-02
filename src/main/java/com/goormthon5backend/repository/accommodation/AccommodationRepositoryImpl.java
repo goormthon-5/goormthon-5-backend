@@ -88,7 +88,7 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
         }
 
         BooleanBuilder builder = new BooleanBuilder();
-        keywords.forEach(keyword -> builder.or(accommodation.address.mainAddress.contains(keyword)));
+        keywords.forEach(keyword -> builder.or(accommodation.address.addressGroup.contains(keyword)));
         return builder;
     }
 
@@ -98,8 +98,9 @@ public class AccommodationRepositoryImpl implements AccommodationRepositoryCusto
         }
 
         String normalizedKeyword = keyword.trim();
-        return accommodation.address.mainAddress.contains(normalizedKeyword)
-            .or(accommodation.address.detailAddress.contains(normalizedKeyword))
+        return accommodation.address.addressGroup.contains(normalizedKeyword)
+            .or(accommodation.address.addressShort.contains(normalizedKeyword))
+            .or(accommodation.address.addressDetail.contains(normalizedKeyword))
             .or(accommodation.user.name.contains(normalizedKeyword));
     }
 

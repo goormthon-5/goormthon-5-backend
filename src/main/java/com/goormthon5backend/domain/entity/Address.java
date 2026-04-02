@@ -10,14 +10,14 @@ import jakarta.persistence.Embeddable;
 @Getter
 public class Address {
 
-    @Column(name = "main_address", nullable = false)
-    private String mainAddress;
+    @Column(name = "address_group", nullable = false)
+    private String addressGroup;
 
-    @Column(name = "detail_address", nullable = false)
-    private String detailAddress;
+    @Column(name = "address_short", nullable = false)
+    private String addressShort;
 
-    @Column(name = "postal_code", nullable = false)
-    private String postalCode;
+    @Column(name = "address_detail", nullable = false)
+    private String addressDetail;
 
     @Column(name = "latitude", nullable = false)
     private Float latitude;
