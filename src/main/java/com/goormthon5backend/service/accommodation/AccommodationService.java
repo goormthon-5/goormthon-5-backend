@@ -6,6 +6,8 @@ import com.goormthon5backend.repository.AccommodationOptionRepository;
 import com.goormthon5backend.repository.AccommodationImageRepository;
 import com.goormthon5backend.repository.guest_book.GuestBookRepository;
 import com.goormthon5backend.repository.accommodation.AccommodationRepository;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,7 +66,7 @@ public class AccommodationService {
         Long guestBookCount = 0L;
         if (ratingSummary != null) {
             if (ratingSummary[0] != null) {
-                averageRating = ((Number) ratingSummary[0]).doubleValue();
+                averageRating = roundToOneDecimal(((Number) ratingSummary[0]).doubleValue());
             }
             if (ratingSummary[1] != null) {
                 guestBookCount = ((Number) ratingSummary[1]).longValue();
@@ -108,7 +110,7 @@ public class AccommodationService {
         Map<Long, Long> guestBookCountByAccommodationId = new HashMap<>();
         guestBookRepository.findRatingSummaryByAccommodationIds(accommodationIds).forEach(row -> {
             Long accommodationId = (Long) row[0];
-            Double averageRating = row[1] != null ? ((Number) row[1]).doubleValue() : 0.0;
+            Double averageRating = row[1] != null ? roundToOneDecimal(((Number) row[1]).doubleValue()) : 0.0;
             Long guestBookCount = ((Number) row[2]).longValue();
             averageRatingByAccommodationId.put(accommodationId, averageRating);
             guestBookCountByAccommodationId.put(accommodationId, guestBookCount);
@@ -145,5 +147,11 @@ public class AccommodationService {
         if (hasStartDate && endDate.isBefore(startDate)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endDate는 startDate보다 같거나 이후여야 합니다.");
         }
+    }
+
+    private Double roundToOneDecimal(Double value) {
+        return BigDecimal.valueOf(value)
+            .setScale(1, RoundingMode.HALF_UP)
+            .doubleValue();
     }
 }
