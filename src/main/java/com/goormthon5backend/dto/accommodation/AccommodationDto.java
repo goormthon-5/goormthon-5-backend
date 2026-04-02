@@ -49,6 +49,10 @@ public final class AccommodationDto {
         AddressDto address,
         Integer cost,
         String imageUrl,
+        String personality,
+        String trait,
+        String cleanlinessLevel,
+        Boolean hasWifi,
         Double averageRating,
         Long guestBookCount,
         List<OptionDto> options
@@ -56,6 +60,10 @@ public final class AccommodationDto {
         public static DetailDto from(
             Accommodation accommodation,
             String imageUrl,
+            String personality,
+            String trait,
+            String cleanlinessLevel,
+            Boolean hasWifi,
             Double averageRating,
             Long guestBookCount,
             List<OptionDto> options
@@ -67,6 +75,10 @@ public final class AccommodationDto {
                 .address(AddressDto.from(accommodation.getAddress()))
                 .cost(accommodation.getCost())
                 .imageUrl(imageUrl)
+                .personality(personality)
+                .trait(trait)
+                .cleanlinessLevel(cleanlinessLevel)
+                .hasWifi(hasWifi)
                 .averageRating(averageRating)
                 .guestBookCount(guestBookCount)
                 .options(options)

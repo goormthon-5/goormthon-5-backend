@@ -1,8 +1,10 @@
 package com.goormthon5backend.service.accommodation;
 
 import com.goormthon5backend.domain.entity.Accommodation;
+import com.goormthon5backend.domain.entity.AccommodationHostInfo;
 import com.goormthon5backend.dto.accommodation.AccommodationAiDto;
 import com.goormthon5backend.dto.accommodation.AccommodationDto;
+import com.goormthon5backend.repository.AccommodationHostInfoRepository;
 import com.goormthon5backend.repository.AccommodationOptionRepository;
 import com.goormthon5backend.repository.AccommodationImageRepository;
 import com.goormthon5backend.repository.guest_book.GuestBookRepository;
@@ -29,6 +31,7 @@ public class AccommodationService {
     private final GuestBookRepository guestBookRepository;
     private final AccommodationOptionRepository accommodationOptionRepository;
     private final AccommodationImageRepository accommodationImageRepository;
+    private final AccommodationHostInfoRepository accommodationHostInfoRepository;
     private final ChatClient chatClient;
     private final ObjectMapper objectMapper;
 
@@ -37,6 +40,7 @@ public class AccommodationService {
         GuestBookRepository guestBookRepository,
         AccommodationOptionRepository accommodationOptionRepository,
         AccommodationImageRepository accommodationImageRepository,
+        AccommodationHostInfoRepository accommodationHostInfoRepository,
         ChatClient.Builder chatClientBuilder,
         ObjectMapper objectMapper
     ) {
@@ -44,6 +48,7 @@ public class AccommodationService {
         this.guestBookRepository = guestBookRepository;
         this.accommodationOptionRepository = accommodationOptionRepository;
         this.accommodationImageRepository = accommodationImageRepository;
+        this.accommodationHostInfoRepository = accommodationHostInfoRepository;
         this.chatClient = chatClientBuilder.build();
         this.objectMapper = objectMapper;
     }
@@ -107,10 +112,15 @@ public class AccommodationService {
             .stream()
             .findFirst()
             .orElse(null);
+        AccommodationHostInfo hostInfo = accommodationHostInfoRepository.findById(accommodationId).orElse(null);
 
         return AccommodationDto.DetailDto.from(
             accommodation,
             imageUrl,
+            hostInfo != null ? hostInfo.getPersonality() : null,
+            hostInfo != null ? hostInfo.getTrait() : null,
+            hostInfo != null ? hostInfo.getCleanlinessLevel().name() : null,
+            hostInfo != null ? hostInfo.getHasWifi() : null,
             averageRating,
             guestBookCount,
             options
