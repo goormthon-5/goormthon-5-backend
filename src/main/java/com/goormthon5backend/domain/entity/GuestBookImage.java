@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 @Table(name = "guestbook_images")
 
 @Getter
-public class GuestbookImage {
+public class GuestBookImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +32,6 @@ public class GuestbookImage {
     @JoinColumn(name = "guest_book_id", nullable = false)
     private GuestBook guestBook;
 
-    protected GuestbookImage() {
+    protected GuestBookImage() {
     }
 }
