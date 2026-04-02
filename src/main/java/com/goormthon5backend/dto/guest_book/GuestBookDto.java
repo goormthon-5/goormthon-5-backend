@@ -4,6 +4,7 @@ import com.goormthon5backend.domain.enums.GuestBookType;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 public final class GuestBookDto {
@@ -52,10 +53,9 @@ public final class GuestBookDto {
         Long userId,
         String content,
         String type,
-        Integer rating,
-        String imageUrl
+        Integer rating
     ) {
-        public GuestBookType validateAndGetType() {
+        public GuestBookType validateAndGetType(MultipartFile imageFile) {
             if (userId == null || type == null || type.isBlank()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "필수 값이 누락되었습니다.");
             }
@@ -73,8 +73,9 @@ public final class GuestBookDto {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "type은 TEXT 또는 IMAGE만 가능합니다.");
             }
 
-            if (guestBookType == GuestBookType.IMAGE && (imageUrl == null || imageUrl.isBlank())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "IMAGE 타입은 imageUrl이 필수입니다.");
+            boolean hasImageFile = imageFile != null && !imageFile.isEmpty();
+            if (guestBookType == GuestBookType.IMAGE && !hasImageFile) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "IMAGE 타입은 image 파일이 필수입니다.");
             }
             return guestBookType;
         }

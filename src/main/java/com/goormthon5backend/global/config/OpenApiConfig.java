@@ -12,16 +12,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
-    private final String serverUrl;
-
-    public OpenApiConfig(@Value("${app.swagger.server-url:/}") String serverUrl) {
-        this.serverUrl = serverUrl;
-    }
+    @Value("${swagger.server-url:http://localhost:8080}")
+    private String serverUrl;
 
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .servers(List.of(new Server().url(serverUrl)))
+                .servers(List.of(
+                        new Server().url(serverUrl)
+                ))
                 .info(
                         new Info()
                                 .title("Goormthon 5 Backend API")
