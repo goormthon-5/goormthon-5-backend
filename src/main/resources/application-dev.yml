@@ -21,3 +21,7 @@ aws:
     region: ${AWS_REGION}
     access-key: ${AWS_ACCESS_KEY_ID}
     secret-key: ${AWS_SECRET_ACCESS_KEY}
+
+app:
+  swagger:
+    server-url: https://goormthon-5.goorm.training

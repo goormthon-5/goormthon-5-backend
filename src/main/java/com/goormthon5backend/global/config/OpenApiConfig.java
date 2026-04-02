@@ -5,18 +5,23 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
 
+    private final String serverUrl;
+
+    public OpenApiConfig(@Value("${app.swagger.server-url:/}") String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .servers(List.of(
-                        new Server().url("https://goormthon-5.goorm.training")
-                ))
+                .servers(List.of(new Server().url(serverUrl)))
                 .info(
                         new Info()
                                 .title("Goormthon 5 Backend API")
