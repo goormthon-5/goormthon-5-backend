@@ -19,7 +19,7 @@ public final class AccommodationDto {
         Integer cost,
         Double averageRating,
         Long guestBookCount,
-        List<String> availableOptions
+        List<String> options
     ) {
         public static ListItemDto from(
             Accommodation accommodation,
@@ -35,7 +35,7 @@ public final class AccommodationDto {
                 .cost(accommodation.getCost())
                 .averageRating(averageRating)
                 .guestBookCount(guestBookCount)
-                .availableOptions(availableOptions)
+                .options(availableOptions)
                 .build();
         }
     }
@@ -75,7 +75,7 @@ public final class AccommodationDto {
 
     public record OptionDto(
         Long optionId,
-        String category,
+        String name,
         Integer price
     ) {
     }
