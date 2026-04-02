@@ -46,17 +46,38 @@ public final class AccommodationDto {
         String name,
         String description,
         AddressDto address,
-        Integer cost
+        Integer cost,
+        String imageUrl,
+        Double averageRating,
+        Long guestBookCount,
+        List<OptionDto> options
     ) {
-        public static DetailDto from(Accommodation accommodation) {
+        public static DetailDto from(
+            Accommodation accommodation,
+            String imageUrl,
+            Double averageRating,
+            Long guestBookCount,
+            List<OptionDto> options
+        ) {
             return DetailDto.builder()
                 .accommodationId(accommodation.getAccommodationId())
                 .name(accommodation.getName())
                 .description(accommodation.getDescription())
                 .address(AddressDto.from(accommodation.getAddress()))
                 .cost(accommodation.getCost())
+                .imageUrl(imageUrl)
+                .averageRating(averageRating)
+                .guestBookCount(guestBookCount)
+                .options(options)
                 .build();
         }
+    }
+
+    public record OptionDto(
+        Long optionId,
+        String category,
+        Integer price
+    ) {
     }
 
     public record AddressDto(

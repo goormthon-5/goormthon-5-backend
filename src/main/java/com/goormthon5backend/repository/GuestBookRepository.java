@@ -15,4 +15,11 @@ public interface GuestBookRepository extends JpaRepository<GuestBook, Long> {
         GROUP BY g.accommodation.accommodationId
         """)
     List<Object[]> findRatingSummaryByAccommodationIds(@Param("accommodationIds") List<Long> accommodationIds);
+
+    @Query("""
+        SELECT AVG(g.rating), COUNT(g)
+        FROM GuestBook g
+        WHERE g.accommodation.accommodationId = :accommodationId
+        """)
+    Object[] findRatingSummaryByAccommodationId(@Param("accommodationId") Long accommodationId);
 }

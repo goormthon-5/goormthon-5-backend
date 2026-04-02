@@ -14,4 +14,12 @@ public interface AccommodationOptionRepository extends JpaRepository<Accommodati
         WHERE ao.accommodation.accommodationId IN :accommodationIds
         """)
     List<Object[]> findOptionCategoriesByAccommodationIds(@Param("accommodationIds") List<Long> accommodationIds);
+
+    @Query("""
+        SELECT ao.option.optionId, ao.option.category, ao.cost
+        FROM AccommodationOption ao
+        WHERE ao.accommodation.accommodationId = :accommodationId
+        ORDER BY ao.option.optionId ASC
+        """)
+    List<Object[]> findOptionDetailsByAccommodationId(@Param("accommodationId") Long accommodationId);
 }

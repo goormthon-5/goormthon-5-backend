@@ -4,6 +4,7 @@ import com.goormthon5backend.domain.entity.Accommodation;
 import com.goormthon5backend.domain.enums.OptionCategory;
 import com.goormthon5backend.dto.accommodation.AccommodationDto;
 import com.goormthon5backend.repository.AccommodationOptionRepository;
+import com.goormthon5backend.repository.AccommodationImageRepository;
 import com.goormthon5backend.repository.GuestBookRepository;
 import com.goormthon5backend.repository.accommodation.AccommodationRepository;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class AccommodationService {
     private final AccommodationRepository accommodationRepository;
     private final GuestBookRepository guestBookRepository;
     private final AccommodationOptionRepository accommodationOptionRepository;
+    private final AccommodationImageRepository accommodationImageRepository;
 
     public List<AccommodationDto.ListItemDto> getAccommodationList(
         List<String> areaGroup,
@@ -57,7 +59,40 @@ public class AccommodationService {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "숙소를 찾을 수 없습니다."));
 
-        return AccommodationDto.DetailDto.from(accommodation);
+        Object[] ratingSummary = guestBookRepository.findRatingSummaryByAccommodationId(accommodationId);
+        Double averageRating = 0.0;
+        Long guestBookCount = 0L;
+        if (ratingSummary != null) {
+            if (ratingSummary[0] != null) {
+                averageRating = ((Number) ratingSummary[0]).doubleValue();
+            }
+            if (ratingSummary[1] != null) {
+                guestBookCount = ((Number) ratingSummary[1]).longValue();
+            }
+        }
+
+        List<AccommodationDto.OptionDto> options = accommodationOptionRepository
+            .findOptionDetailsByAccommodationId(accommodationId)
+            .stream()
+            .map(row -> new AccommodationDto.OptionDto(
+                ((Number) row[0]).longValue(),
+                String.valueOf(row[1]),
+                row[2] != null ? ((Number) row[2]).intValue() : null
+            ))
+            .toList();
+
+        String imageUrl = accommodationImageRepository.findImageUrlsByAccommodationId(accommodationId)
+            .stream()
+            .findFirst()
+            .orElse(null);
+
+        return AccommodationDto.DetailDto.from(
+            accommodation,
+            imageUrl,
+            averageRating,
+            guestBookCount,
+            options
+        );
     }
 
     private List<AccommodationDto.ListItemDto> toListItemDtos(List<Accommodation> accommodations) {
