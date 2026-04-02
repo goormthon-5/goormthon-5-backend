@@ -17,6 +17,11 @@ spec:
         image: 837126493345.dkr.ecr.ap-northeast-2.amazonaws.com/goormthon-5/backend:build-8
         ports:
         - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: backend-env
+        - secretRef:
+            name: backend-secret
         volumeMounts:
         - name: config-volume
           mountPath: /app/config
