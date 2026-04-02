@@ -30,7 +30,7 @@ public class AccommodationController {
 
     @GetMapping("/search")
     public List<AccommodationDto.ListItemDto> search(
-        @RequestParam String keyword,
+        @RequestParam(required = false) String keyword,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {

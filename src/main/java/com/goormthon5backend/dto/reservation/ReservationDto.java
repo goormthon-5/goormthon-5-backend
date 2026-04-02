@@ -22,4 +22,14 @@ public final class ReservationDto {
         Long reservationId
     ) {
     }
+
+    public record ListItemDto(
+        Long reservationId,
+        Long accommodationId,
+        Long userId,
+        Integer guestCount,
+        LocalDate startDate,
+        LocalDate endDate
+    ) {
+    }
 }

@@ -3,6 +3,7 @@ package com.goormthon5backend.service.reservation;
 import com.goormthon5backend.dto.reservation.ReservationDto;
 import com.goormthon5backend.repository.ReservationAvailabilityRow;
 import com.goormthon5backend.repository.ReservationInventoryRepository;
+import com.goormthon5backend.repository.ReservationListRow;
 import com.goormthon5backend.repository.ReservationRepository;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -19,6 +20,13 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final ReservationInventoryRepository reservationInventoryRepository;
+
+    public List<ReservationDto.ListItemDto> getReservationList(Long userId) {
+        return reservationRepository.findReservationList(userId)
+            .stream()
+            .map(this::toListItemDto)
+            .toList();
+    }
 
     @Transactional
     public ReservationDto.CreateResponse createReservation(ReservationDto.CreateRequest request) {
@@ -60,5 +68,16 @@ public class ReservationService {
         if (nights < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "endDate는 startDate보다 같거나 이후여야 합니다.");
         }
+    }
+
+    private ReservationDto.ListItemDto toListItemDto(ReservationListRow row) {
+        return new ReservationDto.ListItemDto(
+            row.reservationId(),
+            row.accommodationId(),
+            row.userId(),
+            row.guestCount(),
+            row.startDate(),
+            row.endDate()
+        );
     }
 }
