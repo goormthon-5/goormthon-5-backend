@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
-    @Value("${openapi.server-url:http://localhost:8080}")
+    @Value("${swagger.server-url:http://localhost:8080}")
     private String serverUrl;
 
     @Bean
