@@ -6,12 +6,15 @@ import com.goormthon5backend.repository.UserRepository;
 import com.goormthon5backend.repository.accommodation.AccommodationRepository;
 import com.goormthon5backend.repository.guest_book.GuestBookRepository;
 import com.goormthon5backend.repository.guest_book.GuestbookImageRepository;
+import com.goormthon5backend.service.file.S3FileService;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -22,6 +25,7 @@ public class GuestBookService {
     private final UserRepository userRepository;
     private final GuestBookRepository guestBookRepository;
     private final GuestbookImageRepository guestbookImageRepository;
+    private final S3FileService s3FileService;
 
     public List<GuestBookDto.ListItemDto> getAccommodationGuestBooks(Long accommodationId) {
         if (!accommodationRepository.existsById(accommodationId)) {
@@ -32,13 +36,14 @@ public class GuestBookService {
     }
 
     @Transactional
-    public void createGuestBook(Long accommodationId, GuestBookDto.CreateRequest request) {
+    public void createGuestBook(Long accommodationId, GuestBookDto.CreateRequest request, MultipartFile imageFile)
+        throws IOException {
 
         if (request == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        GuestBookType type = request.validateAndGetType();
+        GuestBookType type = request.validateAndGetType(imageFile);
 
         try {
             Long guestBookId = guestBookRepository.createGuestBook(
@@ -50,12 +55,20 @@ public class GuestBookService {
             );
 
             if (type == GuestBookType.IMAGE) {
-                Long imageId = guestbookImageRepository.createImage(request.imageUrl().trim());
+                String imageUrl = resolveImageUrl(imageFile);
+                Long imageId = guestbookImageRepository.createImage(imageUrl);
                 guestbookImageRepository.createGuestbookImage(guestBookId, imageId);
             }
 
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "유효하지 않은 사용자 또는 숙소");
         }
+    }
+
+    private String resolveImageUrl(MultipartFile imageFile) throws IOException {
+        if (imageFile == null || imageFile.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "IMAGE 타입은 image 파일이 필수입니다.");
+        }
+        return s3FileService.upload(imageFile).fileUrl();
     }
 }
