@@ -2,6 +2,7 @@ package com.goormthon5backend.dto.accommodation;
 
 import com.goormthon5backend.domain.entity.Accommodation;
 import com.goormthon5backend.domain.entity.Address;
+import java.util.List;
 import lombok.Builder;
 
 public final class AccommodationDto {
@@ -15,15 +16,26 @@ public final class AccommodationDto {
         String name,
         String description,
         AddressDto address,
-        Integer cost
+        Integer cost,
+        Double averageRating,
+        Long guestBookCount,
+        List<String> availableOptions
     ) {
-        public static ListItemDto from(Accommodation accommodation) {
+        public static ListItemDto from(
+            Accommodation accommodation,
+            Double averageRating,
+            Long guestBookCount,
+            List<String> availableOptions
+        ) {
             return ListItemDto.builder()
                 .accommodationId(accommodation.getAccommodationId())
                 .name(accommodation.getName())
                 .description(accommodation.getDescription())
                 .address(AddressDto.from(accommodation.getAddress()))
                 .cost(accommodation.getCost())
+                .averageRating(averageRating)
+                .guestBookCount(guestBookCount)
+                .availableOptions(availableOptions)
                 .build();
         }
     }

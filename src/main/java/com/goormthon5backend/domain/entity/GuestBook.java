@@ -36,6 +36,9 @@ public class GuestBook {
     @Column(name = "type", nullable = false)
     private GuestBookType type;
 
+    @Column(name = "rating")
+    private Integer rating;
+
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
