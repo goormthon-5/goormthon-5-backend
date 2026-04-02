@@ -19,6 +19,9 @@ public class Address {
     @Column(name = "address_detail", nullable = false)
     private String addressDetail;
 
+    @Column(name = "postal_code", nullable = false)
+    private String postalCode;
+
     @Column(name = "latitude", nullable = false)
     private Float latitude;
 
