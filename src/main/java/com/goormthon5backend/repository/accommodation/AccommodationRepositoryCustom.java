@@ -17,4 +17,6 @@ public interface AccommodationRepositoryCustom {
         LocalDate startDate,
         LocalDate endDate
     );
+
+    void updateNameAndDescription(Long accommodationId, String name, String description);
 }
