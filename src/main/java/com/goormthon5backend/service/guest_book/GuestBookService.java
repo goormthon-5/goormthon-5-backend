@@ -80,7 +80,7 @@ public class GuestBookService {
 
     private void maybeRunAiRewriteInBackgroundAfterCommit(Long accommodationId) {
         long guestBookCount = guestBookRepository.countByAccommodationId(accommodationId);
-        if (guestBookCount != 10L) {
+        if (guestBookCount != 5L) {
             return;
         }
 
