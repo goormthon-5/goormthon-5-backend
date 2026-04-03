@@ -1,4 +1,4 @@
-package com.goormthon5backend.repository;
+package com.goormthon5backend.repository.reservation;
 
 import java.time.LocalDate;
 

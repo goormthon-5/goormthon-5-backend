@@ -1,4 +1,4 @@
-package com.goormthon5backend.repository;
+package com.goormthon5backend.repository.reservation;
 
 import com.goormthon5backend.domain.entity.QInventory;
 import com.goormthon5backend.domain.entity.QReservationInventory;

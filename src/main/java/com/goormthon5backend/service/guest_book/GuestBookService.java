@@ -2,7 +2,7 @@ package com.goormthon5backend.service.guest_book;
 
 import com.goormthon5backend.domain.enums.GuestBookType;
 import com.goormthon5backend.dto.guest_book.GuestBookDto;
-import com.goormthon5backend.repository.UserRepository;
+import com.goormthon5backend.repository.user.UserRepository;
 import com.goormthon5backend.repository.accommodation.AccommodationRepository;
 import com.goormthon5backend.repository.guest_book.GuestBookRepository;
 import com.goormthon5backend.repository.guest_book.GuestbookImageRepository;
@@ -80,7 +80,7 @@ public class GuestBookService {
 
     private void maybeRunAiRewriteInBackgroundAfterCommit(Long accommodationId) {
         long guestBookCount = guestBookRepository.countByAccommodationId(accommodationId);
-        if (guestBookCount != 10L) {
+        if (guestBookCount != 5L) {
             return;
         }
 
