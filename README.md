@@ -121,7 +121,7 @@
 ## 🏗 Service Architecture
 
 <p align="center">
-  <img src="assets/service-architecture.png" alt="Service Architecture" width="600"/>
+  <img src="https://raw.githubusercontent.com/goormthon-5/goormthon-5-frontend/main/assets/service-architecture.png" alt="Service Architecture" width="600"/>
 </p>
 
 ### Tech Stack
@@ -205,7 +205,7 @@ https://github.com/user-attachments/assets/54b8214b-158f-4ab9-a729-f44279502c54
   <tr>
     <td align="center">
       <a href="https://samchoon-irang.vercel.app/">
-        <img src="assets/qr-code.jpg" alt="QR Code" width="200"/>
+<img src="https://raw.githubusercontent.com/goormthon-5/goormthon-5-frontend/main/assets/qr-code.jpg" alt="QR Code" width="200"/>
       </a>
       <br/>
       <sub><b>📱 QR 코드로 접속하기</b></sub>
